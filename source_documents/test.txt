@@ -1,1 +1,15 @@
-Test Text File to read
+Acoustics is the science that deals with the study of all mechanical waves in gases, liquids, and solids including topics such as vibration, sound, ultrasound, and infrasound. A scientist who works in the field of acoustics is an acoustician while someone working in the field of acoustics technology may be called an acoustical engineer.
+
+1. **Ancient Era**: The earliest known study of acoustics can be traced back to ancient civilizations. The Greeks had a deep understanding of the principles of acoustics. Pythagoras (circa 500 BC) is traditionally credited with the discovery of the simple numerical ratios that determine the musical scale, though it's unlikely he was the first to make these observations. The ancient Chinese also made significant contributions, with a rich tradition of bells, drums, and other musical instruments.
+
+2. **Middle Ages and Renaissance**: During the Middle Ages and the Renaissance, the study of acoustics was largely focused on the nature of sound and music. The understanding of sound propagation became more scientific with the development of natural philosophy.
+
+3. **Modern Era**: During the 17th century, Galileo Galilei and Marin Mersenne both made significant contributions. Mersenne, known as the "father of acoustics", formulated the law of strings (the frequency of vibration of a string is proportional to the square root of the tension and inversely proportional to the length) and studied resonance.
+
+4. **Industrial Revolution**: The Industrial Revolution in the 19th century brought new tools and technologies that expanded the field of acoustics. Scientists like Hermann von Helmholtz and Lord Rayleigh made significant contributions in understanding the nature of sound, vibration, and wave propagation.
+
+5. **20th Century**: In the 20th century, the development of electronics and computing power significantly expanded the field of acoustics. Technologies like sonar, ultrasonics, and noise control were developed. The field of psychoacoustics, which studies how humans perceive sound, also emerged.
+
+6. **Today**: Today, acoustics is a broad and complex field, encompassing everything from the design of concert halls and noise control in urban environments, to the study of animal communication and the development of ultrasound technologies in medicine.
+
+Note: this is a test summary from GPT-4 summary from online. 
