@@ -5,6 +5,7 @@ from typing import List
 from dotenv import load_dotenv
 from multiprocessing import Pool
 from tqdm import tqdm
+import fitz  # PyMuPDF
 
 from langchain.document_loaders import (
     CSVLoader,
@@ -60,6 +61,21 @@ class MyElmLoader(UnstructuredEmailLoader):
 
         return doc
 
+def ingest_djvu(file_path):
+    doc = fitz.open(file_path)
+    text = ""
+    for page in doc:
+        text += page.get_text()
+    return text
+
+class DjvuLoader:
+    def __init__(self, file_path, **kwargs):
+        self.file_path = file_path
+
+    def load(self):
+        text = ingest_djvu(self.file_path)
+        # Create a new Document with the extracted text and metadata
+        return [Document(page_content=text, metadata={"source": self.file_path})]    
 
 # Map file extensions to document loaders and their arguments
 LOADER_MAPPING = {
@@ -77,6 +93,7 @@ LOADER_MAPPING = {
     ".ppt": (UnstructuredPowerPointLoader, {}),
     ".pptx": (UnstructuredPowerPointLoader, {}),
     ".txt": (TextLoader, {"encoding": "utf8"}),
+    ".djvu": (DjvuLoader, {}),
     # Add more mappings for other file extensions and loaders as needed
 }
 
