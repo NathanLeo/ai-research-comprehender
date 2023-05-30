@@ -5,7 +5,7 @@ from typing import List
 from dotenv import load_dotenv
 from multiprocessing import Pool
 from tqdm import tqdm
-import fitz  # PyMuPDF
+import djvu.decode
 
 from langchain.document_loaders import (
     CSVLoader,
@@ -31,7 +31,7 @@ from constants import CHROMA_SETTINGS
 load_dotenv()
 
 
-# Load environment variables
+# Load environment variables
 persist_directory = os.environ.get('PERSIST_DIRECTORY')
 source_directory = os.environ.get('SOURCE_DIRECTORY', 'source_documents')
 embeddings_model_name = os.environ.get('EMBEDDINGS_MODEL_NAME')
@@ -61,22 +61,28 @@ class MyElmLoader(UnstructuredEmailLoader):
 
         return doc
 
-def ingest_djvu(file_path):
-    doc = fitz.open(file_path)
-    text = ""
-    for page in doc:
-        text += page.get_text()
-    return text
+class DjVuLoader:
+    """Loads a document from a DjVu file"""
 
-class DjvuLoader:
-    def __init__(self, file_path, **kwargs):
+    def __init__(self, file_path):
         self.file_path = file_path
 
-    def load(self):
-        text = ingest_djvu(self.file_path)
-        # Create a new Document with the extracted text and metadata
-        return [Document(page_content=text, metadata={"source": self.file_path})]    
+    def load(self) -> List[Document]:
+        """Load a DjVu file and extract its text"""
+        with open(self.file_path, 'rb') as f:
+            document = djvu.decode.Context(f=f)
+            page_texts = []
+            for page_number in range(len(document.pages)):
+                page = document.pages[page_number]
+                text_page = page.text()
+                text = text_page.extract().get_text()
+                page_texts.append(text)
 
+            # Combine all page texts into a single string
+            text = "\n".join(page_texts)
+
+            return [Document(page_content=text, metadata={"source": self.file_path})]
+        
 # Map file extensions to document loaders and their arguments
 LOADER_MAPPING = {
     ".csv": (CSVLoader, {}),
@@ -93,7 +99,7 @@ LOADER_MAPPING = {
     ".ppt": (UnstructuredPowerPointLoader, {}),
     ".pptx": (UnstructuredPowerPointLoader, {}),
     ".txt": (TextLoader, {"encoding": "utf8"}),
-    ".djvu": (DjvuLoader, {}),
+    ".djvu": (DjVuLoader, {}),
     # Add more mappings for other file extensions and loaders as needed
 }
 
