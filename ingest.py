@@ -5,7 +5,6 @@ from typing import List
 from dotenv import load_dotenv
 from multiprocessing import Pool
 from tqdm import tqdm
-import djvu.decode
 
 from langchain.document_loaders import (
     CSVLoader,
@@ -61,28 +60,7 @@ class MyElmLoader(UnstructuredEmailLoader):
 
         return doc
 
-class DjVuLoader:
-    """Loads a document from a DjVu file"""
 
-    def __init__(self, file_path):
-        self.file_path = file_path
-
-    def load(self) -> List[Document]:
-        """Load a DjVu file and extract its text"""
-        with open(self.file_path, 'rb') as f:
-            document = djvu.decode.Context(f=f)
-            page_texts = []
-            for page_number in range(len(document.pages)):
-                page = document.pages[page_number]
-                text_page = page.text()
-                text = text_page.extract().get_text()
-                page_texts.append(text)
-
-            # Combine all page texts into a single string
-            text = "\n".join(page_texts)
-
-            return [Document(page_content=text, metadata={"source": self.file_path})]
-        
 # Map file extensions to document loaders and their arguments
 LOADER_MAPPING = {
     ".csv": (CSVLoader, {}),
@@ -99,7 +77,6 @@ LOADER_MAPPING = {
     ".ppt": (UnstructuredPowerPointLoader, {}),
     ".pptx": (UnstructuredPowerPointLoader, {}),
     ".txt": (TextLoader, {"encoding": "utf8"}),
-    ".djvu": (DjVuLoader, {}),
     # Add more mappings for other file extensions and loaders as needed
 }
 
